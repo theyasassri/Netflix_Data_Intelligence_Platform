@@ -35,3 +35,4 @@
 ## 7. Recommendation Engine Performance
 - **Thematic Precision:** The content-based metadata soup recommender demonstrated an average **55–80% Jaccard Genre Overlap** across diverse query types.
 - **Key Advantage:** Eliminates cold-start for all newly introduced movies and television shows on day one.
+

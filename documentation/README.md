@@ -8,3 +8,4 @@ This directory contains the full documentation suite for the Auspify Technologie
 3. [Strategic Business Findings](findings.md) — In-depth business insights uncovered through EDA and modeling.
 4. [Technical Methodology](methodology.md) — Mathematical formulas, preprocessing logic, ML pipelines, and evaluation metrics.
 5. [Screenshots & Visualizations](screenshots/) — Exported presentation-grade charts for Tasks 1, 2, 3, and 5.
+

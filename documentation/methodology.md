@@ -33,3 +33,4 @@
   - `StandardScaler` on `release_year`, `year_added`, `month_added`.
 - **Validation Protocol:** 5-Fold Stratified Cross-Validation ensuring balanced minority class (`TV Show` ~30.3%) representation across all folds.
 - **Optimization:** Grid search hyperparameter tuning on champion linear classifiers with L2 regularization.
+
