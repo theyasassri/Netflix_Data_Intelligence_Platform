@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netflix Data Intelligence Platform</title>
+  <style>
+    :root {
+      --netflix-red: #E50914;
+      --netflix-black: #141414;
+      --card-bg: #1f1f1f;
+      --border-color: #333333;
+      --text-main: #FFFFFF;
+      --text-muted: #AAAAAA;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--netflix-black);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.95) 100%);
+      padding: 1.2rem 2rem;
+      border-bottom: 2px solid var(--netflix-red);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--netflix-red);
+      letter-spacing: 1px;
+    }
+    .badge {
+      background-color: #2a2a2a;
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+    nav {
+      display: flex;
+      background: #181818;
+      border-bottom: 1px solid var(--border-color);
+      overflow-x: auto;
+    }
+    nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      padding: 1rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      border-bottom: 3px solid transparent;
+    }
+    nav button:hover { color: var(--text-main); }
+    nav button.active {
+      color: var(--netflix-red);
+      border-bottom: 3px solid var(--netflix-red);
+      background: rgba(229, 9, 20, 0.05);
+    }
+    main { padding: 2rem; max-width: 1300px; margin: 0 auto; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Stats Grid */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.4rem;
+    }
+    .stat-val {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--netflix-red);
+      margin-top: 0.3rem;
+    }
+    .stat-sub { font-size: 0.85rem; color: var(--text-muted); }
+    
+    /* Input & Table styles */
+    .search-bar {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    input, select, button.btn {
+      padding: 0.7rem 1rem;
+      background: #2a2a2a;
+      border: 1px solid var(--border-color);
+      color: white;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+    input:focus, select:focus { outline: 1px solid var(--netflix-red); }
+    button.btn {
+      background: var(--netflix-red);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button.btn:hover { background: #b80710; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    th { background: #262626; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+    tr:hover { background: #252525; }
+    .tag {
+      background: #333;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    .tag-movie { background: #831010; }
+    .tag-tv { background: #2b4c7e; }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      header { flex-direction: column; align-items: flex-start; }
+      main { padding: 1rem; }
+      th, td { padding: 0.6rem; font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div>
+      <div class="logo">NETFLIX INTELLIGENCE</div>
+      <div style="font-size: 0.85rem; color: var(--text-muted);">Auspify Technologies Data Science Internship Capstone</div>
+    </div>
+    <div class="badge">Catalog: 8,789 Titles | Verified 100% Clean</div>
+  </header>
+
+  <nav>
+    <button class="active" onclick="switchTab('overview')">Catalog Overview</button>
+    <button onclick="switchTab('browse')">Title Search & Filter</button>
+    <button onclick="switchTab('recommender')">AI Content Recommender</button>
+    <button onclick="switchTab('classifier')">ML Classifier Simulator</button>
+  </nav>
+
+  <main>
+    <!-- TAB 1: OVERVIEW -->
+    <section id="overview" class="tab-content active">
+      <div class="grid-4" id="stats-grid">
+        <div class="card">
+          <div class="stat-sub">Total Catalog Titles</div>
+          <div class="stat-val" id="stat-total">8,789</div>
+          <div class="stat-sub">Zero missing values</div>
+        </div>
+        <div class="card">
+          <div class="stat-sub">Feature Movies</div>
+          <div class="stat-val" id="stat-movies">6,125</div>
+          <div class="stat-sub">69.7% of total catalog</div>
+        </div>
+        <div class="card">
+          <div class="stat-sub">TV Series & Shows</div>
+          <div class="stat-val" id="stat-tv">2,664</div>
+          <div class="stat-sub">30.3% of total catalog</div>
+        </div>
+        <div class="card">
+          <div class="stat-sub">Production Countries</div>
+          <div class="stat-val">86</div>
+          <div class="stat-sub">Top: USA (3,240), India (1,057)</div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem;">
+        <div class="card">
+          <h3 style="margin-bottom: 1rem;">Top Producing Countries</h3>
+          <div id="countries-list">Loading countries...</div>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom: 1rem;">Dominant Primary Genres</h3>
+          <div id="genres-list">Loading genres...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BROWSER -->
+    <section id="browse" class="tab-content">
+      <div class="card">
+        <div class="search-bar">
+          <input type="text" id="search-input" placeholder="Search by title (e.g. Midnight Mass, Stranger, Sankofa)..." style="flex: 1; min-width: 250px;">
+          <select id="type-filter">
+            <option value="">All Content Types</option>
+            <option value="Movie">Movies Only</option>
+            <option value="TV Show">TV Shows Only</option>
+          </select>
+          <button class="btn" onclick="executeSearch()">Search Catalog</button>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Primary Genre</th>
+                <th>Director</th>
+                <th>Country</th>
+                <th>Release</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody id="titles-tbody">
+              <tr><td colspan="7" style="text-align: center; color: var(--text-muted);">Use the search bar above to query titles.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: RECOMMENDER -->
+    <section id="recommender" class="tab-content">
+      <div class="card">
+        <h3 style="margin-bottom: 0.5rem;">Content-Based Recommendation Engine</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.2rem; font-size: 0.9rem;">
+          Uses a multi-attribute TF-IDF metadata soup (genres, director, country, rating) with linear cosine similarity kernel.
+        </p>
+        <div class="search-bar">
+          <input type="text" id="rec-input" value="Midnight Mass" placeholder="Enter title (e.g. Ganglands, Dick Johnson Is Dead)..." style="flex: 1;">
+          <button class="btn" onclick="executeRecommend()">Get Top 10 Recommendations</button>
+        </div>
+
+        <div id="rec-results"></div>
+      </div>
+    </section>
+
+    <!-- TAB 4: CLASSIFIER -->
+    <section id="classifier" class="tab-content">
+      <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <h3 style="margin-bottom: 0.5rem;">Predictive ML Content Classifier</h3>
+        <p style="color: var(--text-muted); margin-bottom: 1.2rem; font-size: 0.9rem;">
+          Predicts whether an incoming title will be a <strong>Movie</strong> or a <strong>TV Show</strong> based purely on metadata signals (without duration leakage).
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div>
+            <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Listed Genres (comma-separated)</label>
+            <input type="text" id="cls-genres" value="TV Dramas, Crime TV Shows, International TV Shows" style="width: 100%;">
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+              <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Maturity Rating</label>
+              <select id="cls-rating" style="width: 100%;">
+                <option value="TV-MA" selected>TV-MA</option>
+                <option value="TV-14">TV-14</option>
+                <option value="PG-13">PG-13</option>
+                <option value="R">R</option>
+                <option value="TV-PG">TV-PG</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Country of Origin</label>
+              <input type="text" id="cls-country" value="United States" style="width: 100%;">
+            </div>
+          </div>
+          <button class="btn" style="margin-top: 0.5rem;" onclick="executeClassify()">Run ML Prediction</button>
+        </div>
+
+        <div id="cls-result" style="margin-top: 1.5rem;"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+      if (tabId === 'browse' && document.getElementById('titles-tbody').children.length <= 1) {
+        executeSearch();
+      }
+    }
+
+    async function loadOverview() {
+      try {
+        const res = await fetch('/api/dashboard/summary');
+        const data = await res.json();
+        if (data.status === 'success') {
+          // Top countries
+          const countriesHtml = data.top_countries.map(c => 
+            `<div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #2a2a2a;">
+              <span>${c.country}</span><span style="font-weight: bold; color: var(--netflix-red);">${c.count.toLocaleString()}</span>
+            </div>`
+          ).join('');
+          document.getElementById('countries-list').innerHTML = countriesHtml;
+
+          // Top genres
+          const genresHtml = data.top_genres.map(g => 
+            `<div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #2a2a2a;">
+              <span>${g.genre}</span><span style="font-weight: bold; color: var(--netflix-red);">${g.count.toLocaleString()}</span>
+            </div>`
+          ).join('');
+          document.getElementById('genres-list').innerHTML = genresHtml;
+        }
+      } catch (e) {
+        console.error("Dashboard overview load error:", e);
+      }
+    }
+
+    async function executeSearch() {
+      const q = document.getElementById('search-input').value;
+      const type = document.getElementById('type-filter').value;
+      const tbody = document.getElementById('titles-tbody');
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Searching...</td></tr>';
+
+      try {
+        const res = await fetch(`/api/titles?query=${encodeURIComponent(q)}&type=${encodeURIComponent(type)}&limit=15`);
+        const data = await res.json();
+        if (data.data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No matching titles found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.data.map(t => `
+          <tr>
+            <td style="font-weight: 600;">${t.title}</td>
+            <td><span class="tag ${t.type === 'Movie' ? 'tag-movie' : 'tag-tv'}">${t.type}</span></td>
+            <td>${t.primary_genre}</td>
+            <td>${t.director}</td>
+            <td>${t.main_country}</td>
+            <td>${t.release_year}</td>
+            <td><span class="tag">${t.rating}</span></td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="7" style="color: red; text-align: center;">Search failed: ${e.message}</td></tr>`;
+      }
+    }
+
+    async function executeRecommend() {
+      const title = document.getElementById('rec-input').value;
+      const container = document.getElementById('rec-results');
+      container.innerHTML = '<p style="color: var(--text-muted); margin-top: 1rem;">Calculating cosine similarities...</p>';
+
+      try {
+        const res = await fetch(`/api/recommendations?title=${encodeURIComponent(title)}&n=8`);
+        const data = await res.json();
+        if (data.status !== 'success') {
+          container.innerHTML = `<p style="color: #ff6b6b; margin-top: 1rem;">${data.message}</p>`;
+          return;
+        }
+        container.innerHTML = `
+          <h4 style="margin: 1.5rem 0 0.5rem 0;">Top Recommendations for "${data.query_title}":</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Primary Genre</th>
+                <th>Director</th>
+                <th>Country</th>
+                <th>Similarity</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.data.map((r, idx) => `
+                <tr>
+                  <td>#${idx + 1}</td>
+                  <td style="font-weight: bold;">${r.title}</td>
+                  <td><span class="tag ${r.type === 'Movie' ? 'tag-movie' : 'tag-tv'}">${r.type}</span></td>
+                  <td>${r.primary_genre}</td>
+                  <td>${r.director}</td>
+                  <td>${r.main_country}</td>
+                  <td style="color: var(--netflix-red); font-weight: bold;">${(r.similarity_score * 100).toFixed(1)}%</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      } catch (e) {
+        container.innerHTML = `<p style="color: red; margin-top: 1rem;">Error: ${e.message}</p>`;
+      }
+    }
+
+    async function executeClassify() {
+      const genres = document.getElementById('cls-genres').value;
+      const rating = document.getElementById('cls-rating').value;
+      const country = document.getElementById('cls-country').value;
+      const resultDiv = document.getElementById('cls-result');
+      resultDiv.innerHTML = '<p style="color: var(--text-muted);">Running ML pipeline inference...</p>';
+
+      try {
+        const res = await fetch('/api/predictions/classify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ listed_in: genres, rating: rating, main_country: country })
+        });
+        const data = await res.json();
+        const pred = data.prediction;
+        const isTv = pred.predicted_type === 'TV Show';
+        
+        resultDiv.innerHTML = `
+          <div style="background: #252525; padding: 1.2rem; border-radius: 8px; border-left: 4px solid ${isTv ? '#2b4c7e' : 'var(--netflix-red)'};">
+            <div style="font-size: 0.9rem; color: var(--text-muted);">Model Prediction</div>
+            <div style="font-size: 1.8rem; font-weight: 800; color: ${isTv ? '#64B5F6' : '#FF5252'}; margin: 0.2rem 0;">
+              ${pred.predicted_type} (${pred.confidence_pct}% Confidence)
+            </div>
+            <div style="font-size: 0.85rem; color: #ccc; margin-top: 0.5rem;">
+              Class Probabilities: <strong>Movie: ${(pred.probability_movie*100).toFixed(1)}%</strong> | <strong>TV Show: ${(pred.probability_tv_show*100).toFixed(1)}%</strong>
+            </div>
+          </div>
+        `;
+      } catch (e) {
+        resultDiv.innerHTML = `<p style="color: red;">Classification error: ${e.message}</p>`;
+      }
+    }
+
+    // Auto-load on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      loadOverview();
+      executeSearch();
+    });
+  </script>
+</body>
+</html>
