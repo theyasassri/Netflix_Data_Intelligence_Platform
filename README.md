@@ -118,6 +118,19 @@ jupyter lab
 3. `backend/notebooks/03_recommendation_system.ipynb`
 4. `backend/notebooks/04_classification_model.ipynb`
 
+### 3. Launch Interactive Web Dashboard
+Run the built-in HTTP application server (zero external web dependencies required):
+```bash
+python backend/app/main.py
+```
+Open **`http://localhost:8000`** in your browser to explore the responsive UI with catalog search, live AI recommender, and ML classification simulator.
+
+### 4. Run Automated Unit Tests
+Verify data integrity, analytics, recommendation algorithms, and ML predictions:
+```bash
+python -m unittest backend/tests/test_platform.py
+```
+
 ---
 
 ## 👥 Auspify Technologies Internship Details
