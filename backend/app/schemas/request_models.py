@@ -50,3 +50,4 @@ class ClassificationResult:
     probability_movie: float
     probability_tv_show: float
     confidence_pct: float
+

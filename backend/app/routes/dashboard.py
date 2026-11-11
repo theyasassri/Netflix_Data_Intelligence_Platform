@@ -14,3 +14,4 @@ def handle_get_dashboard_summary() -> Dict[str, Any]:
         "top_genres": top_genres,
         "ratings": ratings[:6]
     }
+

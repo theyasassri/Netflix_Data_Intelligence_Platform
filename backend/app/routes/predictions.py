@@ -31,3 +31,4 @@ def handle_classify_content(payload: Dict[str, Any]) -> Dict[str, Any]:
         },
         "prediction": result
     }
+

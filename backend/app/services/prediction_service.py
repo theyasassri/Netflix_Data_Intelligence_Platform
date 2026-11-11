@@ -78,3 +78,4 @@ class PredictionService:
             "probability_tv_show": round(prob_tv, 4),
             "confidence_pct": round(confidence, 2)
         }
+

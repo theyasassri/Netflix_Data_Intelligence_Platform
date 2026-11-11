@@ -41,3 +41,4 @@ class AnalyticsService:
         df = DataService.get_df()
         ratings = df['rating'].value_counts()
         return [{"rating": k, "count": int(v), "percentage": round(int(v)/len(df)*100, 2)} for k, v in ratings.items()]
+

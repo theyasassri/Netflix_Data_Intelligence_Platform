@@ -14,3 +14,4 @@ def handle_get_title(show_id: str) -> Dict[str, Any]:
     if not title:
         return {"status": "error", "message": f"Show ID '{show_id}' not found"}
     return {"status": "success", "data": title}
+

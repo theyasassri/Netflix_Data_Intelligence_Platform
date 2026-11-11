@@ -18,3 +18,4 @@ def handle_get_recommendations(title: str, n: int = 10) -> Dict[str, Any]:
         "count": len(recs),
         "data": recs
     }
+

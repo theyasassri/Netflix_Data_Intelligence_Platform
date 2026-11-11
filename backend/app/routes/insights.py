@@ -24,3 +24,4 @@ def handle_get_ratings() -> Dict[str, Any]:
         "status": "success",
         "data": AnalyticsService.get_ratings_breakdown()
     }
+
