@@ -171,23 +171,23 @@
       <div class="grid-4" id="stats-grid">
         <div class="card">
           <div class="stat-sub">Total Catalog Titles</div>
-          <div class="stat-val" id="stat-total">—</div>
+          <div class="stat-val" id="stat-total">8,789</div>
           <div class="stat-sub">Zero missing values</div>
         </div>
         <div class="card">
           <div class="stat-sub">Feature Movies</div>
-          <div class="stat-val" id="stat-movies">—</div>
-          <div class="stat-sub" id="stat-movies-sub">Calculating...</div>
+          <div class="stat-val" id="stat-movies">6,125</div>
+          <div class="stat-sub">69.7% of total catalog</div>
         </div>
         <div class="card">
           <div class="stat-sub">TV Series & Shows</div>
-          <div class="stat-val" id="stat-tv">—</div>
-          <div class="stat-sub" id="stat-tv-sub">Calculating...</div>
+          <div class="stat-val" id="stat-tv">2,664</div>
+          <div class="stat-sub">30.3% of total catalog</div>
         </div>
         <div class="card">
           <div class="stat-sub">Production Countries</div>
-          <div class="stat-val" id="stat-countries">—</div>
-          <div class="stat-sub" id="stat-countries-sub">Global catalog footprint</div>
+          <div class="stat-val">86</div>
+          <div class="stat-sub">Top: USA (3,240), India (1,057)</div>
         </div>
       </div>
 
@@ -306,21 +306,10 @@
         const res = await fetch('/api/dashboard/summary');
         const data = await res.json();
         if (data.status === 'success') {
-          // Dynamic metric cards
-          if (data.overview) {
-            document.getElementById('stat-total').textContent = Number(data.overview.total_titles).toLocaleString();
-            document.getElementById('stat-movies').textContent = Number(data.overview.movies_count).toLocaleString();
-            document.getElementById('stat-movies-sub').textContent = `${data.overview.movie_percentage}% of total catalog`;
-            document.getElementById('stat-tv').textContent = Number(data.overview.tv_shows_count).toLocaleString();
-            document.getElementById('stat-tv-sub').textContent = `${data.overview.tv_show_percentage}% of total catalog`;
-            document.getElementById('stat-countries').textContent = Number(data.overview.unique_countries).toLocaleString();
-            document.getElementById('stat-countries-sub').textContent = `Spanning ${data.overview.earliest_release_year}–${data.overview.latest_release_year}`;
-          }
-
           // Top countries
           const countriesHtml = data.top_countries.map(c => 
             `<div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #2a2a2a;">
-              <span>${c.country}</span><span style="font-weight: bold; color: var(--netflix-red);">${Number(c.count).toLocaleString()}</span>
+              <span>${c.country}</span><span style="font-weight: bold; color: var(--netflix-red);">${c.count.toLocaleString()}</span>
             </div>`
           ).join('');
           document.getElementById('countries-list').innerHTML = countriesHtml;
@@ -328,7 +317,7 @@
           // Top genres
           const genresHtml = data.top_genres.map(g => 
             `<div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #2a2a2a;">
-              <span>${g.genre}</span><span style="font-weight: bold; color: var(--netflix-red);">${Number(g.count).toLocaleString()}</span>
+              <span>${g.genre}</span><span style="font-weight: bold; color: var(--netflix-red);">${g.count.toLocaleString()}</span>
             </div>`
           ).join('');
           document.getElementById('genres-list').innerHTML = genresHtml;
